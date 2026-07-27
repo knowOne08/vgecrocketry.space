@@ -1,193 +1,183 @@
-import { Box, Divider, Icon, Link, Typography } from "@mui/material";
 import React from "react";
+import { Box, Link, Typography, useMediaQuery } from "@mui/material";
 import { useCustomNavigate } from "../utils/useCustomNavigate";
 import { theme } from "../theme";
+import { colors, fonts, layout } from "../tokens";
 import { SocialLinks } from "./SocialLinks";
-import CopyrightIcon from '@mui/icons-material/Copyright';
-import { color, motion } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import logo from '/logo.png'
 import { Copyright } from "./Copyright";
-interface Footer {
-    isSmallScreen: boolean
-}
-export const Footer: React.FC<Footer> = ({isSmallScreen}) => {
-    const handleNavigate = useCustomNavigate();
-    const links = [
-        {
-            name:"ABOUT",
-            route:'/about'
-        },
-        {
-            name:"BLOG",
-            route:'/blog'
-        },
-        {
-            name:"MISSIONS",
-            route:'/missions'
-        },
-        {
-            name:"SUPPORT US",
-            route:'/support'
-        },
-    ]
-    
-    const { ref: dividerRef, inView: dividerView } = useInView({
-        triggerOnce: true,
-        threshold: isSmallScreen ? 0.001 : 0.1,
-    });  
-    const { ref: footerRef, inView: footerView } = useInView({
-        triggerOnce: true,
-        threshold: isSmallScreen ? 0.001 : 0.1,
-    });  
-    
-    const fadeInVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8} },
-    };
-    return(
-        <div style={{backgroundColor: "#26282b"}}>
-        <div style={{backgroundColor: "#26282b", height: "5px"}}>
-        </div>
-        <Divider 
-            variant="middle" 
-            color="white"
-            component={motion.div}
-            ref={dividerRef}
-            initial="hidden"
-            animate={dividerView ? 'visible' : 'hidden'}
-            variants={fadeInVariants}
-            sx={{
-                backgroundColor:'white',
-                height: '1px',
-                '&::before, &::after': {
-                    borderColor: 'white',
-                },
-                marginTop: isSmallScreen ? 2.5 : 3.2
-            }}
-        />
-        <Box
-            width="100%"
-            height='auto'
-            marginTop={isSmallScreen ? 3 : 3}
-            display='flex'
-            flexDirection='column'
-            justifyContent='start'
-            alignItems='center'
-            component={motion.div}
-            ref={footerRef}
-            initial="hidden"
-            animate={footerView ? 'visible' : 'hidden'}
-            variants={fadeInVariants}
-            sx={{
-                backgroundColor: "#26282b",
-                paddingBottom: isSmallScreen ? 2 : 3,
-                opacity: 1,
-            }}                
-        >
-            <Box
-                height={isSmallScreen ? 150 :270}
-                width={isSmallScreen ? 150 : 270}
-                alignContent='center'
-                marginTop={2}
-            >
-                <img src={logo} style={{ maxWidth: '100%', maxHeight: '100%' }} onClick={()=>handleNavigate('/home')}/>
-            </Box>
-                <Box
-                    display='flex'
-                    flexDirection='row'
-                    marginTop={isSmallScreen ? 3 : 4}
-                    // height='100%'
-                >
-                    {links.map((link, index) => (
-                        <React.Fragment key={link.route}>
-                            <Link
-                                href={link.route}
-                                sx={{
-                                    color: 'white',
-                                    textUnderlineOffset: '2px',
-                                    textDecorationColor: "white",
-                                    fontFamily: theme.typography.fontFamily,
-                                    fontSize: isSmallScreen ? '14px' : '16px'
-                                }}
-                            >
-                                {link.name}
-                            </Link>
-                            {index !== links.length - 1 && (
-                                <Typography component="span" mt={isSmallScreen ? '0px' : '2px'} mx={1} color="white">
-                                    |
-                                </Typography>
-                            )}
-                        </React.Fragment>
-                    ))}
-                </Box>
-                <Box
-                    marginTop={isSmallScreen ? 3 : 4}
-                    maxWidth={isSmallScreen  ?'200px': '300px'}
-                >
-                    <SocialLinks color='white' fontSize={isSmallScreen ? '17px': '18px'}/>
-                </Box>
-                <Box
-                    marginTop={isSmallScreen ? 2 :3}
-                    marginBlock={isSmallScreen ? 3 : 3}
-                    justifyContent='center'
-                    alignItems='center'
-                    display='flex'
-                    flexDirection='column'
-                >
-                    <Typography
-                        fontFamily='Roboto'
-                        fontSize={isSmallScreen ? '12px' : '16px'}
-                        color="white"
-                        fontWeight='bold'
-                        width='100%'
-                        >
-                        VGEC ROCKETRY TEAM
-                    </Typography>
-                    <Typography
-                        marginRight={isSmallScreen ? 1.7 : 0}
-                        component="address"
-                        fontFamily='Roboto'
-                        fontSize={isSmallScreen ? '12px' : '14px'}
-                        color="#A2A2A2"
-                        fontStyle="normal"
-                    >
-                        Mechanical Workshop <br />
-                        Vishwakarma College<br />
-                        Chandkheda, Gujarat<br />
-                        382424<br />
-                    </Typography>
-                </Box>
-                <Box
-                    display='flex'
-                    flexDirection='row'
-                    marginTop={isSmallScreen ?2: 3}
-                    sx={{
-                    backgroundColor: "#26282b",
-                    paddingBottom: isSmallScreen ? 2 : 3,
-                    opacity: 1,
-                    }}
-                >
-                    {/* <CopyrightIcon
-                        style={{
-                            color: 'white', 
-                            fontSize: '11px', 
-                            marginTop: isSmallScreen ? 2 : 3,
-                            marginRight: 3.5,
-                            marginLeft: 3,
-                        }}
-                    /> 
-                    <Typography
-                        fontFamily='Arial'
-                        color='white'
-                        fontSize='12px'
-                    >
-                        2024 VGEC ROCKETRY TEAM. ALL RIGHTS RESERVED  
-                    </Typography> */}
+import { Reveal } from "./ui/Reveal";
 
-                    <Copyright sx={{ mt: 8, mb: 4, color: "white"}}/>
-                </Box>
+const logo = "/logo.png";
+
+const links = [
+  { name: "About", route: "/about" },
+  { name: "Missions", route: "/missions" },
+  { name: "Blog", route: "/blog" },
+  { name: "Support", route: "/support" },
+];
+
+export const Footer: React.FC<{ isSmallScreen?: boolean }> = () => {
+  const handleNavigate = useCustomNavigate();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  return (
+    <Box
+      component="footer"
+      sx={{
+        position: "relative",
+        zIndex: 1,
+        width: "100%",
+        bgcolor: "#000000", // Pure black
+        borderTop: `1px solid rgba(255,255,255,0.1)`, // Stark edge
+        mt: "auto",
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: layout.maxWidth,
+          mx: "auto",
+          px: { xs: 3, md: 4 },
+          py: { xs: 8, md: 10 },
+        }}
+      >
+        <Reveal>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1.2fr 1fr 1fr" },
+              gap: { xs: 6, md: 8 },
+              mb: { xs: 6, md: 8 },
+            }}
+          >
+            <Box>
+              <Box
+                component="button"
+                onClick={() => handleNavigate("/home")}
+                sx={{ border: "none", background: "none", cursor: "pointer", p: 0, mb: 3 }}
+              >
+                <Box
+                  component="img"
+                  src={logo}
+                  alt="VGEC Rocketry"
+                  sx={{ height: isSmallScreen ? 80 : 100, width: "auto" }}
+                />
+              </Box>
+              <Typography
+                sx={{
+                  fontFamily: fonts.mono,
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.5)",
+                  maxWidth: 280,
+                  lineHeight: 1.8,
+                }}
+              >
+                Vishwakarma Government Engineering College
+                <br />
+                Chandkheda, Gujarat 382424
+              </Typography>
+            </Box>
+
+            <Box>
+              <Typography
+                variant="h6"
+                sx={{ 
+                  color: "#FFFFFF", 
+                  mb: 3, 
+                  fontFamily: fonts.display,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  fontSize: "0.875rem"
+                }}
+              >
+                Navigate
+              </Typography>
+              <StackLinks links={links} />
+            </Box>
+
+            <Box>
+              <Typography
+                variant="h6"
+                sx={{ 
+                  color: "#FFFFFF", 
+                  mb: 3, 
+                  fontFamily: fonts.display,
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                  fontSize: "0.875rem"
+                }}
+              >
+                Connect
+              </Typography>
+              <SocialLinks color="rgba(255,255,255,0.5)" fontSize={isSmallScreen ? 20 : 22} />
+              <Typography
+                component="address"
+                sx={{
+                  mt: 3,
+                  fontStyle: "normal",
+                  fontFamily: fonts.body,
+                  fontSize: "0.875rem",
+                  color: "rgba(255,255,255,0.5)",
+                  lineHeight: 1.7,
+                }}
+              >
+                Mechanical Workshop
+                <br />
+                VGEC Rocketry Team
+              </Typography>
+            </Box>
+          </Box>
+        </Reveal>
+
+        <Box
+          sx={{
+            pt: 4,
+            borderTop: `1px solid rgba(255,255,255,0.1)`,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
+          <Copyright sx={{ color: "rgba(255,255,255,0.3)", fontSize: "0.75rem" }} />
+          <Typography
+            sx={{
+              fontFamily: fonts.mono,
+              fontSize: "0.625rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            Engineering the future of student rocketry
+          </Typography>
         </Box>
-        </div>
-    )
-}
+      </Box>
+    </Box>
+  );
+};
+
+const StackLinks: React.FC<{ links: { name: string; route: string }[] }> = ({ links }) => (
+  <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+    {links.map((link) => (
+      <Link
+        key={link.route}
+        href={link.route}
+        underline="none"
+        sx={{
+          fontFamily: fonts.display,
+          fontSize: "1rem",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.5)",
+          transition: "color 0.2s",
+          "&:hover": { color: "#FFFFFF" }, // Removed blue accent hover
+        }}
+      >
+        {link.name}
+      </Link>
+    ))}
+  </Box>
+);

@@ -10,7 +10,7 @@ import { Navbar } from "../components/Navbar";
 import { motion } from "framer-motion";
 import CardGrid from "../components/Cards";
 import { theme } from "../theme";
-import Aflatoon from "/Aflatoon.jpeg";
+const Aflatoon = "/Aflatoon.jpeg";
 import { useInView } from "react-intersection-observer";
 import { Footer } from "../components/Footer";
 import Mission from "../../../public/MissionsCover.jpeg";
