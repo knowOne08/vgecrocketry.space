@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "yarn build --filter=frontend",
+  "outputDirectory": "apps/frontend/dist",
+  "installCommand": "yarn install --frozen-lockfile",
+  "framework": null,
+  "devCommand": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
