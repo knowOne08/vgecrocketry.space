@@ -2,8 +2,9 @@ export const AboutUsPageContent = {
     ourVisionStatement : "Our vision is to revolutionize rocketry through innovation and teamwork. We aim to break barriers and reach new heights, setting new standards in the field",
     outMissionStatement: "1) To become the center of aerospace learning and passion where students can come to get core hands on learning experience\n\n2) To become a name in Indian amateur rocketry circles where we are referred to as pioneers of the industry in India",
     teamLeaders: [
-        { name: "PAVITRA PATEL", role: "Founder, \nMechanical Lead", img: "/PavitraProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/pavitra-patel-62b74823a/" },
-        { name: "YASH DARJI", role: "Avionics Lead", img: "/YashProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/yash-darji-6249a3255/" },
+        { name: "PAVITRA PATEL", role: "Founder, \nMechanical Lead \n(2022-2024)", img: "/PavitraProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/pavitra-patel-62b74823a/" },
+        { name: "YASH DARJI", role: "Team & Avionics Lead \n(2024-2026)", img: "/YashProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/yash-darji-6249a3255/" },
+        {name: "KRISHKUMAR PATEL", role: " Team Lead \n(2026- )", img: "/krish.jpeg", linkToProfile: "https://www.linkedin.com/in/krish-patel-361722293?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
     ],
     teamMembers: [
         { name: "NEHA TIWARI", role: "Mechanical Design\n Engineer", img: "/NehaProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/neha-tiwari-8a7231296?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
@@ -32,6 +33,20 @@ export const AboutUsPageContent = {
         { name: "VIKASH KUMAVAT", role: "Electronics Design \n& Manufacturing", img: "/VikashProfile.jpeg", linkToProfile: "https://in.linkedin.com/in/vikash-kumavat" },
         { name: "SMIT MEHTA", role: "Managment Team", img: "/SmitProfile.jpeg", linkToProfile: "https://www.linkedin.com/in/smit-mehta-b5921a243/" },
     ],
+
+      recruits2025: [
+        { name: "ALLAN CHRISTIAN", role: "Structural Engineer", img: "/Allan Wilson Christian_.jpg", linkToProfile: "https://www.linkedin.com/in/allan-christian-61117b231/" },
+        { name: "ALVIN SHANTY", role: "Mechanical Design Engineer", img: "/alvin.jpeg", linkToProfile: "https://www.linkedin.com/in/alvin-shanty-b56b9b366/" },
+        { name: "BHAVYA JOSHI", role: "Mechanical Design\n& Manufacturing", img: "/Bhavya.jpg", linkToProfile: "https://www.linkedin.com/in/bhavya-joshi-a9262239a?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+        { name: "DEVANSH YAJURVEDI", role: "Mechanical Design Engineer", img: "/Devansh Yajurvedi.jpg", linkToProfile: "https://www.linkedin.com/in/devanshyajurvedi?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+       // { name: "KRISHKUMAR PATEL", role: "Team Leader", img: "/krish.jpeg", linkToProfile: "https://www.linkedin.com/in/krish-patel-361722293?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+        { name: "KURUKKANPOTTA DIVYA VASUPRASAD", role: "Recovery System Engineer", img: "/Divya.jpg", linkToProfile: "https://www.linkedin.com/in/divya-vasuprasad-021822317?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+        { name: "AMIT SHUKLA", role: "Avionics Engineer", img: "/Amit.jpg", linkToProfile: "https://www.linkedin.com/in/amit-shukla-ba49b7333?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+        { name: "DHRUVALSINH PARMAR", role: "Avionics Engineer", img: "/Dhruval.JPG", linkToProfile: "https://www.linkedin.com/in/dhruvalsinh-parmar-9432392b6?utm_source=share_via&utm_content=profile&utm_medium=member_ios" },
+        { name: "KAVISH RAVAL", role: "Embedded Systems Architect", img: "/kavish.jpeg", linkToProfile: "https://www.linkedin.com/in/kavishraval/" },
+        { name: "KUSHAL ZOPE", role: "Avionics Engineer", img: "/Kushal Zope.webp", linkToProfile: "https://www.linkedin.com/in/kushal-zope-68b466271?utm_source=share_via&utm_content=profile&utm_medium=member_android" },
+        { name: "PARMAR TANVI", role: "Avionics Engineer", img: "/tanvi.jpeg", linkToProfile: "https://www.linkedin.com/in/tanvi-parmar-ec" },
+      ],
     
     gallery: [
         {

@@ -1,6 +1,6 @@
 import { Button, Grid, Stack, Typography, useMediaQuery } from "@mui/material"
 import React from "react"
-import { theme } from "../theme"
+import { theme, colors, fonts } from "../theme"
 import { useCustomNavigate } from "../utils/useCustomNavigate"
 import { To } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
@@ -37,8 +37,14 @@ export const ProfileThumbnail: React.FC<ProfileThumbnail> = ({image, name, role,
                 component={motion.div}
                 sx={{
                     alignItems: "center",
-                    backgroundColor: "white",
-                    borderRadius: "5px",
+                    bgcolor: "transparent",
+                    border: "none",
+                    borderRadius: 0,
+                    p: 0,
+                    transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                    "&:hover": {
+                        transform: "translateY(-4px)",
+                    },
                 }}
                 initial="hidden"
                 ref={profileThumbnailRef}
@@ -47,87 +53,73 @@ export const ProfileThumbnail: React.FC<ProfileThumbnail> = ({image, name, role,
             >
               <img
                 src={image}
-                alt={"Image not Available"}
+                alt={name}
                 style={{
-                    maxWidth: isSmallScreen 
-                                ? "85vw" 
-                                : isMediumScreen 
-                                    ? "30vw" 
-                                    : "15vw",  
-
-                    maxHeight: isSmallScreen 
-                                ? "85vw" 
-                                : isMediumScreen 
-                                    ? "30vw" 
-                                    : "15vw",  
-
-                    minWidth: isSmallScreen 
-                                ? "75vw" 
-                                : isMediumScreen 
-                                    ? "40vw" 
-                                    : "20vw",  
-
-                    minHeight: isSmallScreen 
-                                ? "75vw" 
-                                : isMediumScreen 
-                                    ? "40vw" 
-                                    : "20vw", 
+                    width: isSmallScreen ? "75vw" : isMediumScreen ? "30vw" : "280px",
+                    height: isSmallScreen ? "75vw" : isMediumScreen ? "30vw" : "280px",
                     aspectRatio: "1 / 1",                  
                     objectFit: "cover",  
-                    fontFamily: theme.typography.fontFamily,
-                    borderRadius: "5px",
+                    borderRadius: "8px",
+                    border: "none",
+                    boxShadow: "none",
                 }}
               />
             <Typography
-              style={{
-                // fontFamily: theme.typography.fontFamily,
-                fontFamily: "Nova Square",
-                fontSize:  30,
+              sx={{
+                fontFamily: fonts.display,
+                fontSize: { xs: "1.25rem", md: "1.5rem" },
+                fontWeight: 600,
+                letterSpacing: "0.02em",
+                textTransform: "uppercase",
+                color: colors.text.primary,
                 textAlign: "center",
-                marginTop: 12
-                
+                mt: 3,
+                mb: 1,
               }}
             >
               {name}
             </Typography>
 
             <Typography
-              variant="h6"
-              color="textSecondary"
-              whiteSpace="pre-wrap"
-              style={{
-                // fontFamily: theme.typography.fontFamily,
-                fontFamily: "Nova Square",
+              sx={{
+                fontFamily: fonts.body,
+                fontSize: { xs: "0.875rem", md: "0.9375rem" },
+                color: colors.text.secondary,
                 textAlign: "center",
+                whiteSpace: "pre-wrap",
+                mb: 3,
+                lineHeight: 1.5,
               }}
-              marginBottom={2}
             >
               {role}
             </Typography>
             <Button
-              variant="outlined"
-              onClick={()=>handleNavigate(linkToProfile)}
-              sx={{
-                backgroundColor: "white",
-                display: "flex",
-                borderColor: "black",
-                color: theme.palette.primary.dark,
-                fontSize: isSmallScreen ? '15px' : '17px', 
-                // boxSizing: isSmallScreen ? '35px': '10px',
-                padding: isSmallScreen ? "4px 12px" :"1px 9px", 
-                "&:hover": {
-                    variant: 'contained', 
-                    backgroundColor: 'black',
-                    borderColor: "black",
-                    color: 'white', 
-                },
-              }}
-              style={{
-                fontFamily: theme.typography.fontFamily,
-              }}
-            >
-              Connect
-            </Button>
+  variant="outlined"
+  href={linkToProfile}
+  target="_blank"
+  rel="noopener noreferrer"
+  sx={{
+    borderColor: "#FFFFFF",
+    border: "1px solid #FFFFFF",
+    color: "#FFFFFF",
+    fontFamily: fonts.display,
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    letterSpacing: "0.15em",
+    textTransform: "uppercase",
+    py: 1,
+    px: 3,
+    borderRadius: 0, // Sharp brutalist corners (removes the rounding)
+    transition: "all 0.3s ease",
+    "&:hover": {
+      bgcolor: "#FFFFFF",
+      color: "#000000",
+      borderColor: "#FFFFFF",
+    },
+  }}
+>
+  Connect
+</Button>
             </Stack>
           </Grid>
     )

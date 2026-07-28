@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "cd apps/frontend && yarn build",
+  "outputDirectory": "apps/frontend/dist",
+  "installCommand": "yarn install",
+  "framework": null,
+  "devCommand": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

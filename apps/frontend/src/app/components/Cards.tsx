@@ -1,17 +1,18 @@
 import React from "react";
 import {
+  Box,
   Grid,
   Card,
   CardContent,
   CardMedia,
   Typography,
-  CardActions,
-  Button,
   useMediaQuery,
 } from "@mui/material";
 import { theme } from "../theme";
-import { color, motion } from "framer-motion";
+import { colors, fonts } from "../tokens";
+import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { GhostButton } from "./ui/Buttons";
 
 interface CardData {
   name: string;
@@ -22,96 +23,93 @@ interface CardData {
 
 interface CardGridProps {
   cards: CardData[];
-  isDarkMode: boolean;
-  isFuturePlans: boolean;
+  variant?: "past" | "future";
 }
 
-
-const CardGrid: React.FC<CardGridProps> = ({ cards, isDarkMode, isFuturePlans }) => {
+const CardGrid: React.FC<CardGridProps> = ({ cards, variant = "past" }) => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  
-  return (
-    <Grid
-    container
-    spacing={3} // Adjust the spacing between cards
-    sx={{ padding: { xs: 3, md: 5 } }} // Padding for the grid container
-    >
-      {cards.map((card, index) => {
-      const { ref: cardRef, inView: cardRefView } = useInView({
-          triggerOnce: true,
-          threshold: isSmallScreen ? 0.001 : 0.1,
-      });  
-      const fadeInVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8} },
-      };
+  const isFuture = variant === "future";
 
-       return (
-        <Grid item xs={12} sm={6} md={4} key={index}>
-          <Card
-            sx={{
-              backgroundColor: !isDarkMode ? "white" : "black",
-              color: !isDarkMode ? "black" : "white",
-              maxWidth: 450,
-              boxShadow: 0,
-            }}
-            component={motion.div}
-            ref={cardRef}
-            initial="hidden"
-            animate={cardRefView ?  "visible": "hidden"}
-            variants={fadeInVariants}
-          >
-            <CardMedia
-              component="img"
-              alt={card.name}
-              height="250"
-              image={card.image}
-            />
-            <CardContent>
-              <Typography 
-                gutterBottom 
-                variant="h4" 
-                component="div"
-                fontFamily={theme.typography.fontFamily}
-              >
-                {card.name}
-              </Typography>
-              <Typography 
-                // variant="h7"
-                fontSize={17}
-                fontFamily={theme.typography.fontFamily}
-              >
-                  {card.content}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              {!isFuturePlans && <Button
-                size="small"
-                variant="outlined"
-                href={card.link}
-                target="_blank"
-                
+  return (
+    <Grid container spacing={3}>
+      {cards.map((card, index) => {
+        const { ref, inView } = useInView({
+          triggerOnce: true,
+          threshold: isSmallScreen ? 0.05 : 0.1,
+        });
+
+        return (
+          <Grid item xs={12} sm={6} lg={4} key={index}>
+            <Card
+              component={motion.div}
+              ref={ref}
+              initial={{ opacity: 0, y: 28 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+              transition={{ duration: 0.6, delay: (index % 3) * 0.08 }}
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                bgcolor: isFuture ? colors.bg.elevated : colors.bg.card,
+                border: `1px solid ${colors.border.subtle}`,
+                boxShadow: "none",
+                transition: "border-color 0.3s, transform 0.3s",
+                "&:hover": {
+                  borderColor: colors.border.accent,
+                  transform: "translateY(-3px)",
+                },
+              }}
+            >
+              <CardMedia
+                component="img"
+                alt={card.name}
+                image={card.image}
                 sx={{
-                  fontFamily: theme.typography.fontFamily,
-                  fontSize: 18,
-                  // borderColor: theme.palette.primary.main,
-                   color: "white",
-                   border: "none",
-                   borderRadius: 0,
-                  "&:hover": {
-                    variant: "contained",
-                    backgroundColor: "white",
-                    color: "black",
-                    border: "none"
-                  },
+                  aspectRatio: "16 / 10",
+                  objectFit: "cover",
                 }}
-              >
-                  Read More
-              </Button>}
-            </CardActions>
-          </Card>
-        </Grid>
-      )})}
+              />
+              <CardContent sx={{ flex: 1, p: 3 }}>
+                {isFuture && (
+                  <Typography
+                    sx={{
+                      fontFamily: fonts.mono,
+                      fontSize: "0.625rem",
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: colors.accent.main,
+                      mb: 1.5,
+                    }}
+                  >
+                    In Development
+                  </Typography>
+                )}
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  sx={{ color: colors.text.primary, mb: 1.5, lineHeight: 1.15 }}
+                >
+                  {card.name}
+                </Typography>
+                <Typography variant="body2" sx={{ color: colors.text.secondary }}>
+                  {card.content}
+                </Typography>
+              </CardContent>
+              {!isFuture && card.link !== "/" && (
+                <Box sx={{ px: 3, pb: 3 }}>
+                  <GhostButton
+                    href={card.link}
+                    target="_blank"
+                    sx={{ fontSize: "0.75rem", py: 1, px: 2 }}
+                  >
+                    Read More
+                  </GhostButton>
+                </Box>
+              )}
+            </Card>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

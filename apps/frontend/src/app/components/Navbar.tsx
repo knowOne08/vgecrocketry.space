@@ -1,300 +1,268 @@
-import * as React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
-  Container,
   Drawer,
-  Grid,
   IconButton,
-  Menu,
-  MenuItem,
   Stack,
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { theme } from "../theme";
-import { Link } from "@mui/joy";
-import { motion } from "framer-motion";
-import logo from "/logo.png";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
+import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import { motion, AnimatePresence } from "framer-motion";
+import { theme } from "../theme";
+import { colors, fonts, layout } from "../tokens";
 import { useCustomNavigate } from "../utils/useCustomNavigate";
 import { SocialLinks } from "./SocialLinks";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+const logo = "/logo.png";
 
 const pages = [
-  {
-    name: "ABOUT",
-    route: "/about",
-  },
-  {
-    name: "BLOG",
-    route: "/blog",
-  },
-  {
-    name: "MISSIONS",
-    route: "/missions",
-  },
-  {
-    name: "SUPPORT US",
-    route: "/support",
-  },
+  { name: "About", route: "/about" },
+  { name: "Missions", route: "/missions" },
+  { name: "Blog", route: "/blog" },
+  { name: "Support", route: "/support" },
 ];
+
+const isActive = (route: string) => {
+  const path = document.location.pathname;
+  if (route === "/about") return path.startsWith("/about") || path.startsWith("/story");
+  return path.startsWith(route);
+};
 
 export const Navbar: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  return (
-    <motion.nav
-      initial={{ y: "25%", opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <Container
-        maxWidth={false}
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-          marginTop: -0.4,
-        }}
-      >
-        {isMobile ? <NavbarSm /> : <NavbarXl />}
-      </Container>
-    </motion.nav>
-  );
-};
-
-const handleUnderline = (page: String) => {
-  if (
-    document.location.pathname
-      .toString()
-      .includes(page.toString().toLocaleLowerCase().slice(0, 4))
-  )
-    return "underline";
-  else return "none";
-};
-
-const NavbarXl = () => {
-  const handleNavigate = useCustomNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  return (
-    <>
-      <Grid
-        container
-        direction="row"
-        alignItems="center"
-        rowSpacing={2}
-        justifyContent="left"
-        spacing={0.2}
-        alignContent="flex-end"
-        marginTop={2.7}
-        width="100%"
-        xs="auto"
-        sx={{
-          mb: 3.6,
-          ml: -1,
-        }}
-      >
-        {pages.map((page, key) => (
-          <Grid item justifyContent="flex-start" borderColor="black" key={key}>
-              <Button onClick={() => handleNavigate(page.route)}>
-                <Link
-                  fontSize={23}
-                  fontFamily={theme.typography.fontFamily}
-                  fontWeight={500}
-                  underline="hover"
-                  sx={{
-                    color: "white",
-                    textDecoration: handleUnderline(page.name),
-                    textDecorationThickness: "2px",
-                    textDecorationStyle: "solid",
-                    textUnderlineOffset: "5px",
-                  }}
-                >
-                  {page.name}
-                </Link>
-              </Button>
-          </Grid>
-        )
-        
-        )}
-      </Grid>
-      <Box
-        height={120}
-        width={120}
-        minHeight={120}
-        minWidth={120}
-        mt={2.5}
-        mr={20}
-        alignContent="center"
-      >
-        <img
-          src={logo}
-          style={{ maxWidth: "100%", maxHeight: "100%" }}
-          onClick={() => handleNavigate("/home")}
-        />
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          direction: "row",
-        }}
-      >
-        <SocialLinks color="white" fontSize="none" />
-      </Box>
-    </>
-  );
-};
-
-const NavbarSm: React.FC = () => {
+  const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleNavigate = useCustomNavigate();
 
-  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-    if (
-      event.type === "keydown" &&
-      ((event as React.KeyboardEvent).key === "Tab" ||
-        (event as React.KeyboardEvent).key === "Shift")
-    ) {
-      return;
-    }
-    setDrawerOpen(open);
-  };
-
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 48);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
-      <Grid
-        container
-        display="flex"
-        direction="row"
-        justifyContent="space-between"
-        width="100%"
-      >
-        <Grid item marginLeft={-3}>
-          <Box
-            height={70}
-            width={70}
-            minHeight={80}
-            minWidth={80}
-            mt={2.5}
-            ml={2}
-            alignContent="center"
-          >
-            <img
-              src={logo}
-              style={{ maxWidth: "100%", maxHeight: "100%" }}
-              onClick={() => handleNavigate("/home")}
-            />
-          </Box>
-        </Grid>
-        <Grid item>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              width: "100%",
-              marginTop: 2.3,
-            }}
-          >
-            <IconButton
-              edge="start"
-              aria-label="menu"
-              onClick={toggleDrawer(!drawerOpen)}
-              sx={{ height: 40, width: 40, mt: 2 }}
-            >
-              <DragHandleIcon
-                style={{ fontSize: "45", color: theme.palette.primary.dark }}
-              />
-            </IconButton>
-          </Box>
-        </Grid>
-      </Grid>
-      <Drawer
-        anchor="top"
-        open={drawerOpen}
-        onClose={toggleDrawer(false)}
+      <Box
+        component={motion.header}
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         sx={{
-          "& .MuiDrawer-paper": {
-            overflow: "hidden",
-          },
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1100,
+          height: layout.navHeight,
+          display: "flex",
+          alignItems: "center",
+          px: { xs: 2, md: 4 },
+          transition: "background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease",
+          bgcolor: scrolled ? "rgba(8, 9, 12, 0.82)" : "transparent",
+          backdropFilter: scrolled ? "blur(16px) saturate(1.4)" : "none",
+          borderBottom: scrolled ? `1px solid ${colors.border.subtle}` : "1px solid transparent",
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "flex-end",
+            // Removed maxWidth and mx="auto" to force edge-to-edge alignment
             width: "100%",
-            marginTop: 2.8,
-            marginLeft: -2.8,
-          }}
-        >
-          <IconButton onClick={toggleDrawer(false)}>
-            <CloseIcon
-              sx={{ fontSize: "38px", color: theme.palette.primary.dark }}
-            />
-          </IconButton>
-        </Box>
-        <Container
-          sx={{
-            width: "100%",
-            height: "100vh",
             display: "flex",
-            direction: "column",
-            justifyContent: "space-around",
             alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
           }}
         >
-          <Stack>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              style={{ height: "75%" }}
-              spacing={2}
-              marginTop={15}
-            >
-              {pages.map((page, key) => (
-                <Grid item key={key}>
-                    <a onClick={() => handleNavigate(page.route)}>
-                      <Typography
-                        variant="h4"
-                        fontFamily={theme.typography.fontFamily}
-                        sx={{
-                          textDecoration: handleUnderline(page.name),
-                          textDecorationThickness: "2px",
-                          textDecorationStyle: "solid",
-                          textUnderlineOffset: "5px",
-                        }}
-                      >
-                        {page.name}
-                      </Typography>
-                    </a>
-                </Grid>
-              ))}
-            </Grid>
+          <Box
+            component="button"
+            onClick={() => handleNavigate("/home")}
+            aria-label="VGEC Rocketry home"
+            sx={{
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              p: 0,
+              display: "flex",
+              alignItems: "center",
+              flexShrink: 0,
+            }}
+          >
             <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              width="100%"
-              marginTop={20}
-              style={{ position: "relative" }}
+              component="img"
+              src={logo}
+              alt="VGEC Rocketry"
+              sx={{ height: { xs: 44, md: 52 }, width: "auto" }}
+            />
+          </Box>
+
+          {!isMobile ? (
+            <Stack direction="row" alignItems="center" spacing={1}>
+              {pages.map((page) => (
+                <Box
+                  key={page.route}
+                  component="button"
+                  onClick={() => handleNavigate(page.route)}
+                  sx={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                    px: 2,
+                    py: 1,
+                    position: "relative",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: fonts.display,
+                      fontSize: "0.875rem",
+                      fontWeight: 500,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: isActive(page.route) ? colors.accent.main : colors.text.secondary,
+                      transition: "color 0.2s",
+                      "&:hover": { color: colors.text.primary },
+                    }}
+                  >
+                    {page.name}
+                  </Typography>
+                  {isActive(page.route) && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        width: 4,
+                        height: 4,
+                        borderRadius: "50%",
+                        bgcolor: colors.accent.main,
+                      }}
+                    />
+                  )}
+                </Box>
+              ))}
+              <Box sx={{ ml: 2, pl: 2, borderLeft: `1px solid ${colors.border.subtle}` }}>
+                <SocialLinks color={colors.text.secondary} fontSize={20} />
+              </Box>
+            </Stack>
+          ) : (
+            <IconButton
+              aria-label="Open menu"
+              onClick={() => setDrawerOpen(true)}
+              sx={{ color: colors.text.primary }}
             >
-              <SocialLinks color="white" fontSize="none" />
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Box>
+      </Box>
+
+      <AnimatePresence>
+        {drawerOpen && (
+          <Drawer
+            anchor="right"
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            PaperProps={{
+              sx: {
+                width: "100%",
+                maxWidth: "360px",
+                bgcolor: "#000000", // Pure industrial black
+                borderLeft: "1px solid rgba(255,255,255,0.15)",
+                backgroundImage: "none",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                p: { xs: 4, md: 6 },
+              },
+            }}
+          >
+            {/* Top Close Bar */}
+            <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+              <IconButton 
+                onClick={() => setDrawerOpen(false)} 
+                sx={{ 
+                  color: "rgba(255,255,255,0.7)", 
+                  borderRadius: 0, 
+                  p: 1.5,
+                  "&:hover": { 
+                    bgcolor: "transparent", 
+                    color: "#FFFFFF" 
+                  } 
+                }}
+              >
+                <CloseIcon fontSize="medium" />
+              </IconButton>
             </Box>
-          </Stack>
-        </Container>
-      </Drawer>
+
+            {/* Navigation Links */}
+            <Stack spacing={2} sx={{ my: "auto" }}>
+              {pages.map((page, i) => {
+                const active = isActive(page.route);
+                return (
+                  <motion.div
+                    key={page.route}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.08, ease: "easeOut" }}
+                  >
+                    <Box
+                      component="button"
+                      onClick={() => {
+                        handleNavigate(page.route);
+                        setDrawerOpen(false);
+                      }}
+                      sx={{
+                        border: "none",
+                        background: "none",
+                        cursor: "pointer",
+                        fontFamily: fonts.display,
+                        fontSize: "2rem",
+                        fontWeight: 700,
+                        letterSpacing: "0.05em",
+                        textTransform: "uppercase",
+                        color: active ? "#FFFFFF" : "rgba(255,255,255,0.4)",
+                        py: 1.5,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        textAlign: "left",
+                        width: "100%",
+                        transition: "color 0.3s ease",
+                        "&:hover": {
+                          color: "#FFFFFF",
+                        },
+                      }}
+                    >
+                      {/* Active indicator telemetry line */}
+                      <Box 
+                        sx={{ 
+                          width: active ? "16px" : "0px", 
+                          height: "2px", 
+                          bgcolor: "#FFFFFF", 
+                          transition: "width 0.3s ease" 
+                        }} 
+                      />
+                      {page.name}
+                    </Box>
+                  </motion.div>
+                );
+              })}
+            </Stack>
+
+            {/* Bottom Socials */}
+            <Box component={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} sx={{ pt: 4, borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+              <Typography sx={{ fontFamily: fonts.mono, fontSize: "0.6875rem", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", mb: 2 }}>
+                Secure Channels
+              </Typography>
+              <SocialLinks color="rgba(255,255,255,0.7)" fontSize={22} />
+            </Box>
+          </Drawer>
+        )}
+      </AnimatePresence>
     </>
   );
 };
